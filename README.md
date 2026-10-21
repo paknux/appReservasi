@@ -43,7 +43,7 @@ sudo apt update -y
 #### 2. Install Apache2 dan PHP
 
 ```bash
-sudo apt install apache2 php libapache2-mod-php php-pdo php-mysql php-mbstring php-xml git -y
+sudo apt install apache2 php libapache2-mod-php php-pdo php-mysql php-mbstring php-xml git mariadb-client-core  -y
 ```
 
 #### 3. Clone Repositori
