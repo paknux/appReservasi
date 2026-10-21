@@ -43,20 +43,34 @@ sudo apt update && sudo apt upgrade -y
 #### 2. Install Apache2 dan PHP
 
 ```bash
-sudo apt install apache2 php libapache2-mod-php php-pdo php-mysql php-mbstring php-xml -y
+sudo apt install apache2 php libapache2-mod-php php-pdo php-mysql php-mbstring php-xml git -y
 ```
 
-
-Opsional - Aktifkan dan jalankan Apache2:
+Aktifkan dan jalankan Apache2:
 
 ```bash
 sudo systemctl enable apache2
 sudo systemctl start apache2
 ```
 
-#### 3. Siapkan Database di Server MariaDB (10.100.1.18)
+#### 3. Clone Repositori
 
-Akses MariaDB dari server web ke server MariaDB remote:
+Clone repositori langsung ke direktori web Apache2:
+
+```bash
+git clone https://github.com/paknux/appReservasi.git /var/www/html/reservasi_app
+```
+
+Atur kepemilikan folder agar Apache bisa mengaksesnya:
+
+```bash
+sudo chown -R www-data:www-data /var/www/html/reservasi_app
+sudo chmod -R 755 /var/www/html/reservasi_app
+```
+
+#### 4. Siapkan Database di Server MariaDB (10.100.1.18)
+
+Akses MariaDB remote dari server web:
 
 ```bash
 mysql -h 10.100.1.18 -u admin -padmin123
@@ -65,20 +79,18 @@ mysql -h 10.100.1.18 -u admin -padmin123
 Setelah masuk, buat database-nya:
 
 ```sql
-CREATE DATABASE db_reservasi_ruangan;
+CREATE DATABASE IF NOT EXISTS db_reservasi_ruangan;
 EXIT;
 ```
 
 > User MariaDB yang digunakan adalah `admin` dengan password `admin123` yang sudah tersedia di server.
 
-
-
-#### 4. Import File SQL ke Server MariaDB Remote
+#### 5. Import File SQL ke Server MariaDB Remote
 
 Dari server web (Ubuntu), jalankan:
 
 ```bash
-mysql -h 10.100.1.18 -u admin -padmin123 db_reservasi_ruangan < /path/ke/reservasi_ruangan.sql
+mysql -h 10.100.1.18 -u admin -padmin123 db_reservasi_ruangan < /var/www/html/reservasi_app/reservasi_ruangan.sql
 ```
 
 File SQL akan otomatis:
@@ -88,24 +100,9 @@ File SQL akan otomatis:
 
 > **Catatan:** Password pada tabel `users` disimpan dalam bentuk **plain text** (tanpa hash), cocok untuk keperluan belajar/demo. Untuk aplikasi produksi, sangat disarankan menggunakan hashing (`password_hash()` / `password_verify()`).
 
-Login default:
+Login default aplikasi:
 - Username: `admin`
 - Password: `admin123`
-
-#### 5. Deploy Aplikasi ke Apache2
-
-Salin folder aplikasi ke direktori web Apache2:
-
-```bash
-git clone https://github.com/paknux/appReservasi.git /var/www/html
-```
-
-Atur kepemilikan folder agar Apache bisa mengaksesnya:
-
-```bash
-sudo chown -R www-data:www-data /var/www/html/reservasi_app
-sudo chmod -R 755 /var/www/html/reservasi_app
-```
 
 #### 6. Konfigurasi Koneksi Database
 
@@ -124,12 +121,51 @@ $DB_USER = 'admin';
 $DB_PASS = 'admin123';
 ```
 
-#### 7. Akses Aplikasi
+#### 7. (Opsional) Konfigurasi Virtual Host Apache2
+
+Jika ingin mengakses aplikasi via domain atau path khusus, buat Virtual Host baru:
+
+```bash
+sudo nano /etc/apache2/sites-available/reservasi.conf
+```
+
+Isi dengan:
+
+```apache
+<VirtualHost *:80>
+    ServerName reservasi.domain.local
+    DocumentRoot /var/www/html/reservasi_app
+
+    <Directory /var/www/html/reservasi_app>
+        AllowOverride All
+        Require all granted
+    </Directory>
+
+    ErrorLog ${APACHE_LOG_DIR}/reservasi_error.log
+    CustomLog ${APACHE_LOG_DIR}/reservasi_access.log combined
+</VirtualHost>
+```
+
+Aktifkan site dan modul rewrite:
+
+```bash
+sudo a2ensite reservasi.conf
+sudo a2enmod rewrite
+sudo systemctl reload apache2
+```
+
+#### 8. Akses Aplikasi
 
 Buka browser dan akses:
 
 ```
-http://<IP-server-web>
+http://<IP-server-web>/reservasi_app/
+```
+
+Atau jika menggunakan Virtual Host:
+
+```
+http://reservasi.domain.local/
 ```
 
 ---
