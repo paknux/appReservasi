@@ -91,5 +91,5 @@ INSERT INTO bookings (room_id, nama_pemesan, email_pemesan, no_telepon, keperlua
 -- =====================================================
 -- SELESAI
 -- Catatan: password disimpan plain text (tanpa hash)
--- Login default -> username: admin | password: admin123
+-- Login default -> username: admin | password: 123
 -- =====================================================
