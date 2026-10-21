@@ -2,11 +2,18 @@
 -- SQL Schema: Sistem Reservasi Ruangan (Hotel/Meeting Room)
 -- Database: MariaDB / MySQL
 -- Jalankan file ini di phpMyAdmin atau MySQL client
--- SEBELUM membuat aplikasi PHP-nya, jangan lupa buat dulu databasenyas
+-- SEBELUM membuat aplikasi PHP-nya
 -- =====================================================
 
+-- 1. Buat Database
+CREATE DATABASE IF NOT EXISTS db_reservasi_ruangan
+  CHARACTER SET utf8mb4
+  COLLATE utf8mb4_general_ci;
+
+USE db_reservasi_ruangan;
+
 -- =====================================================
--- 1. Tabel Users (untuk login admin/staff sederhana)
+-- 2. Tabel Users (untuk login admin/staff sederhana)
 -- =====================================================
 CREATE TABLE IF NOT EXISTS users (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -18,7 +25,7 @@ CREATE TABLE IF NOT EXISTS users (
 ) ENGINE=InnoDB;
 
 -- =====================================================
--- 2. Tabel Ruangan (rooms)
+-- 3. Tabel Ruangan (rooms)
 -- =====================================================
 CREATE TABLE IF NOT EXISTS rooms (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -34,7 +41,7 @@ CREATE TABLE IF NOT EXISTS rooms (
 ) ENGINE=InnoDB;
 
 -- =====================================================
--- 3. Tabel Booking / Reservasi (bookings)
+-- 4. Tabel Booking / Reservasi (bookings)
 -- =====================================================
 CREATE TABLE IF NOT EXISTS bookings (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -54,13 +61,13 @@ CREATE TABLE IF NOT EXISTS bookings (
 ) ENGINE=InnoDB;
 
 -- =====================================================
--- 4. Index tambahan untuk performa query jadwal
+-- 5. Index tambahan untuk performa query jadwal
 -- =====================================================
 CREATE INDEX idx_booking_room_tanggal ON bookings (room_id, tanggal_mulai, tanggal_selesai);
 CREATE INDEX idx_booking_status ON bookings (status);
 
 -- =====================================================
--- 5. Data Awal (Sample Data)
+-- 6. Data Awal (Sample Data)
 -- =====================================================
 
 -- User default (password disimpan plain text, tanpa hash)
