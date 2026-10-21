@@ -51,8 +51,8 @@ sudo apt install apache2 php libapache2-mod-php php-pdo php-mysql php-mbstring p
 Clone repositori langsung ke direktori web Apache2:
 
 ```bash
-rm -rf /var/www/html/*
-rm -rf /var/www/html/.*
+sudo rm -rf /var/www/html/*
+sudo rm -rf /var/www/html/.*
 git clone https://github.com/paknux/appReservasi.git /var/www/html
 ```
 
@@ -116,150 +116,14 @@ $DB_USER = 'admin';
 $DB_PASS = 'admin123';
 ```
 
-#### 7. (Opsional) Konfigurasi Virtual Host Apache2
 
-Jika ingin mengakses aplikasi via domain atau path khusus, buat Virtual Host baru:
-
-```bash
-sudo nano /etc/apache2/sites-available/reservasi.conf
-```
-
-Isi dengan:
-
-```apache
-<VirtualHost *:80>
-    ServerName reservasi.domain.local
-    DocumentRoot /var/www/html/reservasi_app
-
-    <Directory /var/www/html/reservasi_app>
-        AllowOverride All
-        Require all granted
-    </Directory>
-
-    ErrorLog ${APACHE_LOG_DIR}/reservasi_error.log
-    CustomLog ${APACHE_LOG_DIR}/reservasi_access.log combined
-</VirtualHost>
-```
-
-Aktifkan site dan modul rewrite:
-
-```bash
-sudo a2ensite reservasi.conf
-sudo a2enmod rewrite
-sudo systemctl reload apache2
-```
-
-#### 8. Akses Aplikasi
+#### 7. Akses Aplikasi
 
 Buka browser dan akses:
 
 ```
-http://<IP-server-web>/reservasi_app/
+http://<IP-webserver>
 ```
-
-Atau jika menggunakan Virtual Host:
-
-```
-http://reservasi.domain.local/
-```
-
----
-
-### Instalasi di Windows Lokal (XAMPP / Laragon)
-
-#### 1. Siapkan Database
-
-Import file `reservasi_ruangan.sql` ke server MySQL/MariaDB kamu.
-
-> **Catatan:** File SQL sudah menyertakan perintah `CREATE DATABASE` secara otomatis.
-> Jika database `db_reservasi_ruangan` belum ada, akan dibuat saat proses import.
-> Jika sudah ada, pastikan tidak ada konflik nama tabel.
-
----
-
-**Lewat Terminal / CLI:**
-
-Jika database belum ada, buat dulu secara manual:
-
-```bash
-mysql -u root -p -e "CREATE DATABASE IF NOT EXISTS db_reservasi_ruangan;"
-```
-
-Lalu import file SQL-nya:
-
-```bash
-mysql -u root -p db_reservasi_ruangan < reservasi_ruangan.sql
-```
-
----
-
-**Lewat phpMyAdmin:**
-
-1. Buka phpMyAdmin di browser (biasanya `http://localhost/phpmyadmin`)
-2. Jika database belum ada: klik tab **Databases** → isi nama `db_reservasi_ruangan` → klik **Create**
-3. Klik database `db_reservasi_ruangan` di panel kiri
-4. Pilih menu **Import** di bagian atas
-5. Klik **Choose File** → pilih file `reservasi_ruangan.sql`
-6. Klik **Go / Kirim**
-
----
-
-**Lewat HeidiSQL:**
-
-1. Buka HeidiSQL → hubungkan ke server MySQL/MariaDB kamu
-2. Jika database belum ada: klik kanan pada koneksi di panel kiri → **Create new** → **Database** → isi nama `db_reservasi_ruangan` → **OK**
-3. Klik kanan pada database `db_reservasi_ruangan` → pilih **Run SQL file...**
-4. Pilih file `reservasi_ruangan.sql` → klik **Open**
-5. Tunggu hingga proses selesai, pastikan tidak ada error di tab output
-
----
-
-**Lewat MySQL Front:**
-
-1. Buka MySQL Front → login ke server kamu
-2. Jika database belum ada: klik kanan pada server → **New** → **Database** → isi nama `db_reservasi_ruangan` → **OK**
-3. Pilih database `db_reservasi_ruangan` di panel kiri
-4. Klik menu **File** → **Run Script...** (atau tekan `Ctrl+F3`)
-5. Pilih file `reservasi_ruangan.sql` → klik **Open**
-6. Konfirmasi eksekusi → tunggu hingga selesai
-
----
-
-#### 2. Konfigurasi Koneksi Database
-
-Buka file `config/database.php`, sesuaikan dengan kredensial server database kamu:
-
-```php
-$DB_HOST = 'localhost';
-$DB_NAME = 'db_reservasi_ruangan';
-$DB_USER = 'root';   // ganti sesuai user MySQL/MariaDB kamu
-$DB_PASS = '';       // ganti sesuai password MySQL/MariaDB kamu
-```
-
-#### 3. Jalankan Aplikasi
-
-- Letakkan folder `reservasi_app` ke dalam direktori web server:
-  - XAMPP → `htdocs/`
-  - Laragon → `www/`
-- Akses melalui browser: `http://localhost/reservasi_app/`
-
----
-
-## Alur Penggunaan
-
-1. **Dashboard** — melihat ringkasan statistik dan reservasi terbaru
-2. **Data Ruangan** — tambah ruangan baru (nama, tipe, kapasitas, harga per jam, fasilitas, status)
-3. **Reservasi** — buat booking dengan memilih ruangan dan rentang waktu; sistem otomatis mengecek apakah jadwal bentrok sebelum data disimpan
-
-## Catatan Pengembangan Lanjutan (Opsional)
-
-Beberapa hal yang bisa ditambahkan sesuai kebutuhan:
-
-- Halaman login berbasis tabel `users` (session-based auth)
-- Tampilan kalender visual (misal pakai FullCalendar.js) untuk jadwal booking per ruangan
-- Export data reservasi ke Excel/PDF
-- Upload gambar ruangan (kolom `gambar` sudah tersedia di tabel `rooms`)
-- Notifikasi email saat status booking berubah
 
 ## Teknologi
 
