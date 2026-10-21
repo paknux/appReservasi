@@ -37,20 +37,13 @@ Panduan ini untuk instalasi di **Ubuntu 24.04** dengan **Apache2** sebagai web s
 #### 1. Update Sistem
 
 ```bash
-sudo apt update && sudo apt upgrade -y
+sudo apt update -y
 ```
 
 #### 2. Install Apache2 dan PHP
 
 ```bash
 sudo apt install apache2 php libapache2-mod-php php-pdo php-mysql php-mbstring php-xml git -y
-```
-
-Aktifkan dan jalankan Apache2:
-
-```bash
-sudo systemctl enable apache2
-sudo systemctl start apache2
 ```
 
 #### 3. Clone Repositori
@@ -64,8 +57,8 @@ git clone https://github.com/paknux/appReservasi.git /var/www/html/reservasi_app
 Atur kepemilikan folder agar Apache bisa mengaksesnya:
 
 ```bash
-sudo chown -R www-data:www-data /var/www/html/reservasi_app
-sudo chmod -R 755 /var/www/html/reservasi_app
+sudo chown -R www-data:www-data /var/www/html
+sudo chmod -R 755 /var/www/htmls
 ```
 
 #### 4. Siapkan Database di Server MariaDB (10.100.1.18)
