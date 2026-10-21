@@ -83,7 +83,7 @@ EXIT;
 Dari server web (Ubuntu), jalankan:
 
 ```bash
-mysql -h 10.100.1.18 -u admin -padmin123 db_reservasi_ruangan < /var/www/html/reservasi_app/reservasi_ruangan.sql
+mysql -h 10.100.1.18 -u admin -padmin123 db_reservasi_ruangan < /var/www/html/reservasi_ruangan.sql
 ```
 
 File SQL akan otomatis:
