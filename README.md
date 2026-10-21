@@ -58,7 +58,7 @@ Atur kepemilikan folder agar Apache bisa mengaksesnya:
 
 ```bash
 sudo chown -R www-data:www-data /var/www/html
-sudo chmod -R 755 /var/www/htmls
+sudo chmod -R 755 /var/www/html
 ```
 
 #### 4. Siapkan Database di Server MariaDB (10.100.1.18)
