@@ -104,7 +104,7 @@ Login default aplikasi:
 Buka file `config/database.php`:
 
 ```bash
-sudo nano /var/www/html/reservasi_app/config/database.php
+sudo nano /var/www/html/config/database.php
 ```
 
 Sesuaikan dengan konfigurasi berikut:
