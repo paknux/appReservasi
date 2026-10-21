@@ -51,7 +51,9 @@ sudo apt install apache2 php libapache2-mod-php php-pdo php-mysql php-mbstring p
 Clone repositori langsung ke direktori web Apache2:
 
 ```bash
-git clone https://github.com/paknux/appReservasi.git /var/www/html/reservasi_app
+rm -rf /var/www/html/*
+rm -rf /var/www/html/.*
+git clone https://github.com/paknux/appReservasi.git /var/www/html
 ```
 
 Atur kepemilikan folder agar Apache bisa mengaksesnya:
