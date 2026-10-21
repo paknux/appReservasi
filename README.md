@@ -1,19 +1,14 @@
 # Sistem Reservasi Ruangan (Hotel / Meeting Room)
 
-Aplikasi CRUD sederhana untuk mengelola data ruangan dan reservasi/booking, dibangun dengan:
-
-- **PHP** (native, PDO)
-- **MySQL / MariaDB**
-- **Bootstrap 5**
-- **AJAX (jQuery)**
+Aplikasi CRUD sederhana untuk mengelola data ruangan dan reservasi/booking, dibangun dengan PHP native (PDO), MySQL/MariaDB, Bootstrap 5, dan AJAX (jQuery). Cocok untuk kebutuhan hotel, meeting room, atau fasilitas serupa.
 
 ## Fitur
 
-- Dashboard ringkasan (jumlah ruangan, ruangan tersedia, booking hari ini, booking pending)
+- Dashboard ringkasan: jumlah ruangan, ruangan tersedia, booking hari ini, booking pending
 - CRUD Data Ruangan (tambah, edit, hapus, lihat) — tanpa reload halaman
 - CRUD Data Reservasi (tambah, edit, hapus, lihat) — tanpa reload halaman
-- Validasi otomatis **cek bentrok jadwal**: sistem akan menolak booking baru/edit jika rentang waktu bertabrakan dengan booking lain pada ruangan yang sama
-- Filter reservasi berdasarkan status (pending, dikonfirmasi, dibatalkan, selesai)
+- Validasi otomatis cek bentrok jadwal: sistem menolak booking baru/edit jika rentang waktu bertabrakan dengan booking lain pada ruangan yang sama
+- Filter reservasi berdasarkan status: pending, dikonfirmasi, dibatalkan, selesai
 
 ## Struktur Folder
 
@@ -29,7 +24,7 @@ reservasi_app/
 │   └── footer.php           # Footer & script bersama
 ├── index.php                # Dashboard
 ├── rooms.php                # Halaman data ruangan
-├── bookings.php              # Halaman data reservasi
+├── bookings.php             # Halaman data reservasi
 └── reservasi_ruangan.sql    # Script SQL (schema + data awal)
 ```
 
@@ -37,24 +32,69 @@ reservasi_app/
 
 ### 1. Siapkan Database
 
-Import file `reservasi_ruangan.sql` ke server MySQL/MariaDB kamu:
+Import file `reservasi_ruangan.sql` ke server MySQL/MariaDB kamu.
 
-**Lewat phpMyAdmin:**
-1. Buat tab baru → menu **Import**
-2. Pilih file `reservasi_ruangan.sql`
-3. Klik **Go / Kirim**
+> **Catatan:** File SQL sudah menyertakan perintah `CREATE DATABASE` secara otomatis.
+> Jika database `db_reservasi_ruangan` belum ada, akan dibuat saat proses import.
+> Jika sudah ada, pastikan tidak ada konflik nama tabel.
 
-**Lewat terminal / CLI:**
+---
+
+**Lewat Terminal / CLI:**
+
+Jika database belum ada, buat dulu secara manual:
+
 ```bash
-mysql -u root -p < reservasi_ruangan.sql
+mysql -u root -p -e "CREATE DATABASE IF NOT EXISTS db_reservasi_ruangan;"
 ```
 
-File ini akan otomatis:
+Lalu import file SQL-nya:
+
+```bash
+mysql -u root -p db_reservasi_ruangan < reservasi_ruangan.sql
+```
+
+---
+
+**Lewat phpMyAdmin:**
+
+1. Buka phpMyAdmin di browser (biasanya `http://localhost/phpmyadmin`)
+2. Jika database belum ada: klik tab **Databases** → isi nama `db_reservasi_ruangan` → klik **Create**
+3. Klik database `db_reservasi_ruangan` di panel kiri
+4. Pilih menu **Import** di bagian atas
+5. Klik **Choose File** → pilih file `reservasi_ruangan.sql`
+6. Klik **Go / Kirim**
+
+---
+
+**Lewat HeidiSQL:**
+
+1. Buka HeidiSQL → hubungkan ke server MySQL/MariaDB kamu
+2. Jika database belum ada: klik kanan pada koneksi di panel kiri → **Create new** → **Database** → isi nama `db_reservasi_ruangan` → **OK**
+3. Klik kanan pada database `db_reservasi_ruangan` → pilih **Run SQL file...**
+4. Pilih file `reservasi_ruangan.sql` → klik **Open**
+5. Tunggu hingga proses selesai, pastikan tidak ada error di tab output
+
+---
+
+**Lewat MySQL Front:**
+
+1. Buka MySQL Front → login ke server kamu
+2. Jika database belum ada: klik kanan pada server → **New** → **Database** → isi nama `db_reservasi_ruangan` → **OK**
+3. Pilih database `db_reservasi_ruangan` di panel kiri
+4. Klik menu **File** → **Run Script...** (atau tekan `Ctrl+F3`)
+5. Pilih file `reservasi_ruangan.sql` → klik **Open**
+6. Konfirmasi eksekusi → tunggu hingga selesai
+
+---
+
+File SQL akan otomatis:
+
 - Membuat database `db_reservasi_ruangan`
 - Membuat tabel `users`, `rooms`, `bookings`
 - Mengisi beberapa data contoh (5 ruangan, 3 booking, 1 user admin)
 
-> **Catatan:** Password pada tabel `users` disimpan dalam bentuk **plain text** (tanpa hash), sesuai permintaan — cocok untuk keperluan belajar/demo. Untuk aplikasi produksi, sangat disarankan menggunakan hashing (`password_hash()` / `password_verify()`).
+> **Catatan:** Password pada tabel `users` disimpan dalam bentuk **plain text** (tanpa hash), cocok untuk keperluan belajar/demo. Untuk aplikasi produksi, sangat disarankan menggunakan hashing (`password_hash()` / `password_verify()`).
 
 Login default:
 - Username: `admin`
@@ -73,8 +113,10 @@ $DB_PASS = '';       // ganti sesuai password MySQL/MariaDB kamu
 
 ### 3. Jalankan Aplikasi
 
-- Letakkan folder `reservasi_app` ke dalam direktori web server (misal `htdocs` untuk XAMPP, atau `www` untuk Laragon)
-- Akses melalui browser, contoh: `http://localhost/reservasi_app/`
+- Letakkan folder `reservasi_app` ke dalam direktori web server:
+  - XAMPP → `htdocs/`
+  - Laragon → `www/`
+- Akses melalui browser: `http://localhost/reservasi_app/`
 
 ## Alur Penggunaan
 
@@ -84,7 +126,8 @@ $DB_PASS = '';       // ganti sesuai password MySQL/MariaDB kamu
 
 ## Catatan Pengembangan Lanjutan (Opsional)
 
-Beberapa hal yang bisa ditambahkan sendiri sesuai kebutuhan:
+Beberapa hal yang bisa ditambahkan sesuai kebutuhan:
+
 - Halaman login berbasis tabel `users` (session-based auth)
 - Tampilan kalender visual (misal pakai FullCalendar.js) untuk jadwal booking per ruangan
 - Export data reservasi ke Excel/PDF
@@ -93,10 +136,10 @@ Beberapa hal yang bisa ditambahkan sendiri sesuai kebutuhan:
 
 ## Teknologi
 
-| Komponen   | Versi/Sumber                                   |
-|------------|-------------------------------------------------|
-| Bootstrap  | 5.3.3 (CDN)                                     |
-| Bootstrap Icons | 1.11.3 (CDN)                              |
-| jQuery     | 3.7.1 (CDN)                                     |
-| PHP        | 7.4+ / 8.x (disarankan)                        |
-| Database   | MySQL 5.7+ / MariaDB 10.x                      |
+| Komponen        | Versi / Sumber              |
+|-----------------|-----------------------------|
+| Bootstrap       | 5.3.3 (CDN)                 |
+| Bootstrap Icons | 1.11.3 (CDN)                |
+| jQuery          | 3.7.1 (CDN)                 |
+| PHP             | 7.4+ / 8.x (disarankan)    |
+| Database        | MySQL 5.7+ / MariaDB 10.x  |
