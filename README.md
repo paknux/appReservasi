@@ -102,7 +102,7 @@ File SQL akan otomatis:
 
 Login default aplikasi:
 - Username: `admin`
-- Password: `admin123`
+- Password: `123`
 
 #### 6. Konfigurasi Koneksi Database
 

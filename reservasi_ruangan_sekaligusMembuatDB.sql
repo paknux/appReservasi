@@ -72,7 +72,7 @@ CREATE INDEX idx_booking_status ON bookings (status);
 
 -- User default (password disimpan plain text, tanpa hash)
 INSERT INTO users (nama, username, password, role) VALUES
-('Administrator', 'admin', 'admin123', 'admin');
+('Administrator', 'admin', '123', 'admin');
 
 -- Data ruangan contoh
 INSERT INTO rooms (nama_ruangan, tipe, kapasitas, harga_per_jam, fasilitas, status) VALUES
